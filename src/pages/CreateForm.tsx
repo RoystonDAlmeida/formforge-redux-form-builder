@@ -7,7 +7,7 @@ import { addForm } from "@/store/formsSlice";
 import { resetBuilder } from "@/store/builderSlice";
 import { nanoid } from "nanoid";
 import { FormSchema } from "@/types/form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 // The main component for the form creation page.
@@ -18,15 +18,19 @@ export default function CreateForm() {
   const dispatch = useAppDispatch();
   // Gets the navigate function from React Router for redirection.
   const navigate = useNavigate();
+  // Gets location object to check for state passed during navigation.
+  const location = useLocation();
   // State to control the visibility of the save form dialog.
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
   // State to hold the name of the form being created.
   const [formName, setFormName] = useState("");
 
-  // Clear the builder state when the component mounts to ensure a fresh start.
+  // Clear the builder state when the component mounts, unless we are editing a form.
   useEffect(() => {
-    dispatch(resetBuilder());
-  }, [dispatch]);
+    if (location.state?.fromMyForms !== true) {
+      dispatch(resetBuilder());
+    }
+  }, [dispatch, location.state]);
 
   // Handles the final save action after the user provides a form name.
   const handleConfirmSave = () => {
