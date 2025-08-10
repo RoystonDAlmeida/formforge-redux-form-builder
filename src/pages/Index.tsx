@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
-import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 import {
   ClipboardList,
   Database,
@@ -32,6 +33,8 @@ const features = [
 ];
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-background text-foreground">
       <Helmet>
@@ -50,9 +53,47 @@ const Index = () => {
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">FormForge Redux</h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mt-4">A dynamic form builder with validations and derived fields. Preview instantly and manage saved forms—all without a backend.</p>
           <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
-            <a href="/create"><Button size="lg"><Edit className="mr-2 h-4 w-4" /> Start Building</Button></a>
-            <a href="/preview"><Button size="lg" variant="secondary"><Eye className="mr-2 h-4 w-4" /> Live Preview</Button></a>
-            <a href="/myforms"><Button size="lg" variant="outline"><Folder className="mr-2 h-4 w-4" /> My Forms</Button></a>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={() => navigate('/create')}
+              startIcon={<Edit size={16} />}
+              sx={{
+                backgroundColor: 'black',
+                '&:hover': { backgroundColor: 'grey.800' },
+              }}
+            >
+              Start Building
+            </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={() => navigate('/preview')}
+              startIcon={<Eye size={16} />}
+              sx={{
+                color: 'black',
+                borderColor: 'black',
+                '&:hover': {
+                  borderColor: 'black',
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                },
+              }}
+            >
+              Live Preview
+            </Button>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={() => navigate('/myforms')}
+              startIcon={<Folder size={16} />}
+              sx={{
+                color: 'black',
+                borderColor: 'black',
+                '&:hover': { borderColor: 'black', backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+              }}
+            >
+              My Forms
+            </Button>
           </div>
         </section>
 
