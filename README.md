@@ -11,8 +11,17 @@ A dynamic, interactive form builder built with React, TypeScript, and MUI. Insta
 
 ---
 
+## 🎬 Demo
+
+Here's a quick look at FormForge Redux in action. This demonstrates creating a form, adding various fields, configuring a derived field, and previewing the live validation.
+
+![FormForge Redux Demo](assets/FormForge_Demo.gif)
+
+---
+
 ## Contents
 - [FormForge Redux](#formforge-redux)
+  - [🎬 Demo](#-demo)
   - [Contents](#contents)
   - [ Objective](#-objective)
   - [ Features](#-features)
@@ -58,7 +67,7 @@ A dynamic form builder built using React, Typescript, MUI, and localStorage. Use
 1. **Clone the repo:**
    
    ```bash
-    git@github.com:RoystonDAlmeida/formforge-redux-form-builder.git
+    git clone git@github.com:RoystonDAlmeida/formforge-redux-form-builder.git
     cd formforge-redux-form-builder/
    ```
 
