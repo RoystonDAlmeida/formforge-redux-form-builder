@@ -67,8 +67,8 @@ A dynamic form builder built using React, Typescript, MUI, and localStorage. Use
 1. **Clone the repo:**
    
    ```bash
-    git clone git@github.com:RoystonDAlmeida/formforge-redux-form-builder.git
-    cd formforge-redux-form-builder/
+   git clone git@github.com:RoystonDAlmeida/formforge-redux-form-builder.git
+   cd formforge-redux-form-builder/
    ```
 
 2. **Install dependencies:**
