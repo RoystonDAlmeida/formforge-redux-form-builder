@@ -1,166 +1,180 @@
 import { useState } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  Stack,
-  Container,
-  useMediaQuery,
-  useTheme,
-  IconButton,
-  Box,
-  Drawer,
-  List,
-  ListItem,
-  Divider,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
 import { NavLink, Link } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import ListAltIcon from "@mui/icons-material/ListAlt";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { useMediaQuery } from "@/hooks/use-mobile";
+import {
+  Home,
+  FilePlus,
+  Eye,
+  List,
+  PanelLeft,
+  Moon,
+  Sun,
+} from "lucide-react";
+import { useTheme } from "@/components/ThemeProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navItems = [
-  { to: "/", label: "Home", end: true, icon: <HomeIcon /> },
-  { to: "/create", label: "Create", icon: <AddCircleOutlineIcon /> },
-  { to: "/preview", label: "Preview", icon: <VisibilityIcon /> },
-  { to: "/myforms", label: "My Forms", icon: <ListAltIcon /> },
+  { to: "/", label: "Home", end: true, icon: <Home className="h-4 w-4" /> },
+  {
+    to: "/create",
+    label: "Create",
+    icon: <FilePlus className="h-4 w-4" />,
+  },
+  { to: "/preview", label: "Preview", icon: <Eye className="h-4 w-4" /> },
+  { to: "/myforms", label: "My Forms", icon: <List className="h-4 w-4" /> },
 ];
 
-// Navigation button component for the header
-function NavButton({
-  to,
-  label,
-  end = false,
-  onClick,
-}: {
-  to: string;
-  label: string;
-  end?: boolean;
-  onClick?: () => void;
-}) {
-  return (
-    // NavLink handles active state styling
-    <NavLink to={to} end={end} onClick={onClick} style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}>
-      {({ isActive }) => (
-        <Button
-          color="inherit"
-          variant={isActive ? "outlined" : "text"}
-          size="small"
-          aria-label={label}
-          // Ensure button text does not wrap on smaller screens
-          sx={{ width: "100%", whiteSpace: 'nowrap' }}
-        >
-          {label}
-        </Button>
-      )}
-    </NavLink>
-  );
-}
-
-// Drawer content for mobile view
-const MobileDrawer = ({
-  handleDrawerToggle,
-}: {
-  handleDrawerToggle: () => void;
-}) => (
-  <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center', width: 250 }} role="presentation">
-    {/* Drawer Title */}
-    <Typography variant="h6" sx={{ my: 2, fontWeight: 'bold' }}>
-      FormForge Redux
-    </Typography>
-    <Divider />
-    <List>
-      {navItems.map((item) => (
-        <ListItem key={item.to} disablePadding >
-          {/* Use ListItemButton with NavLink for navigation and active styling */}
-          <ListItemButton component={NavLink} to={item.to} end={item.end} sx={{
-            '&.active': {
-              bgcolor: 'action.selected',
-              color: 'primary.main',
-              '& .MuiListItemIcon-root': {
-                color: 'primary.main',
-              },
-            },
-          }}>
-            <ListItemIcon sx={{ minWidth: 40, justifyContent: 'center' }}>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.label} sx={{ textAlign: 'left' }} />
-          </ListItemButton>
-        </ListItem>
-      ))}
-    </List>
-  </Box>
-);
-
 export default function Header() {
-  const theme = useTheme();
-  // useMediaQuery hook to detect if the screen is mobile-sized
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  // State to manage the mobile drawer's open/close status
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Toggles the mobile drawer
-  const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
-  };
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [isOpen, setIsOpen] = useState(false);
+  const { setTheme } = useTheme();
 
   return (
-    <AppBar
-      position="sticky"
-      color="default"
-      elevation={1}
-      // Styling for a semi-transparent, blurred header background
-      sx={{ backdropFilter: "blur(6px)", bgcolor: "rgba(255, 255, 255, 0.8)" }}
-    >
-      <Container maxWidth="lg">
-        <Toolbar sx={{ minHeight: 56, display: "flex", justifyContent: "space-between" }}>
-          {/* App Logo and Title */}
-          <Box component={Link} to="/" sx={{ display: "flex", alignItems: "center", textDecoration: "none", color: "inherit" }}>
-            <img src="/favicon.ico" alt="FormForge Redux icon" width="24" height="24" style={{ marginRight: "8px" }} />
-            <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', flexShrink: 0 }}>
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-14 max-w-screen-2xl items-center">
+        <div className="mr-4 hidden md:flex">
+          <Link to="/" className="mr-6 flex items-center space-x-2">
+            <img
+              src="/favicon.ico"
+              alt="FormForge Redux icon"
+              width="24"
+              height="24"
+            />
+            <span className="hidden font-bold sm:inline-block">
               FormForge Redux
-            </Typography>
-          </Box>
-
-          {/* Conditional rendering based on screen size */}
-          {isMobile ? (
-            // Mobile view: Hamburger icon and Drawer
-            <>
-              <IconButton
-                edge="end"
-                color="inherit"
-                aria-label="menu"
-                onClick={handleDrawerToggle}
-              >
-                <MenuIcon />
-              </IconButton>
-              {/* The sliding drawer menu for mobile */}
-              <Drawer
-                anchor="right"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
-                ModalProps={{
-                  keepMounted: true, // Better open performance on mobile.
-                }}
-              >
-                <MobileDrawer handleDrawerToggle={handleDrawerToggle} />
-              </Drawer>
-            </>
-          ) : (
-            // Desktop view: Horizontal navigation links
-            <Stack direction="row" spacing={1} component="nav" aria-label="Main navigation">
+            </span>
+          </Link>
+          <NavigationMenu>
+            <NavigationMenuList>
               {navItems.map((item) => (
-                <NavButton key={item.to} to={item.to} label={item.label} end={item.end} />
+                <NavigationMenuItem key={item.to}>
+                  <NavLink to={item.to} end={item.end}>
+                    {({ isActive }) => (
+                      <NavigationMenuLink
+                        className={navigationMenuTriggerStyle()}
+                        active={isActive}
+                      >
+                        {item.label}
+                      </NavigationMenuLink>
+                    )}
+                  </NavLink>
+                </NavigationMenuItem>
               ))}
-            </Stack>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+
+        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
+          {isDesktop ? (
+            <nav className="flex items-center gap-4 text-sm">
+              {/* Desktop nav items can go here if you want them separate */}
+            </nav>
+          ) : (
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+                >
+                  <PanelLeft className="h-6 w-6" />
+                  <span className="sr-only">Toggle Menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="pr-0">
+                <SheetHeader>
+                  <SheetTitle>
+                    <Link
+                      to="/"
+                      className="flex items-center"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <img
+                        src="/favicon.ico"
+                        alt="FormForge Redux icon"
+                        width="24"
+                        height="24"
+                        className="mr-2"
+                      />
+                      <span className="font-bold">FormForge Redux</span>
+                    </Link>
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
+                  <div className="flex flex-col space-y-3">
+                    {navItems.map((item) => (
+                      <NavLink
+                        key={item.to}
+                        to={item.to}
+                        end={item.end}
+                        onClick={() => setIsOpen(false)}
+                        className={({ isActive }) =>
+                          `flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground ${
+                            isActive ? "bg-accent" : "text-muted-foreground"
+                          }`
+                        }
+                      >
+                        {item.icon}
+                        {item.label}
+                      </NavLink>
+                    ))}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           )}
-        </Toolbar>
-      </Container>
-    </AppBar>
+          <div className="md:hidden">
+            <Link to="/" className="flex items-center space-x-2">
+              <img
+                src="/favicon.ico"
+                alt="FormForge Redux icon"
+                width="24"
+                height="24"
+              />
+              <span className="font-bold">FormForge Redux</span>
+            </Link>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setTheme("light")}>
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")}>
+                System
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </header>
   );
 }
